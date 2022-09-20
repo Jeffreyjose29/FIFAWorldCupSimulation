@@ -1,0 +1,185 @@
+web_address = 'https://www.fifaindex.com/teams/fifa'
+df = pd.DataFrame()
+for day in range(1,260,1):
+     for pag in range(1,30):
+     
+         source_address = web_address + '05_' + str(day) + '/' + str(pag) + '/' + '?type=1'
+         print('Day:', str(day))
+         print(pag)
+try:
+             soup = get_soup(source_address)
+             result_list =  soup.find('div', {'id': 'no-more-tables'})
+         except:
+             print('Page not found.')
+             break
+date = str(soup.find('ol', {'class': 'breadcrumb'}))
+if df.empty:
+             df = pd.read_html(str(result_list))[0]
+             df['date'] = date
+         else:
+             temp_df = pd.read_html(str(result_list))[0]
+             temp_df['date'] = date
+             df = df.append(temp_df)
+             
+df = read_pickle('team_stats.pickle')
+df.head()
+
+results = pd.read_csv('match_results.csv')
+results.head()
+
+results = results.drop(['city', 'tournament', 'country'], axis=1)
+results.home_team = results.home_team.apply(text_norm) #lower_case
+results.away_team = results.away_team.apply(text_norm) #lower_case
+results.index = pd.DatetimeIndex(results.date).year
+results = results.drop('date', 1)
+results.head()
+
+results = results.loc[2004:2017]
+df_teams = list(df.name.unique())
+results = results.reset_index()
+for index, row in results.iterrows():
+    if row.home_team not in df_teams:
+        results.loc[index, 'home_team'] = None
+    if row.away_team not in df_teams:
+        results.loc[index, 'away_team'] = None
+        
+results = results.dropna()
+
+results['score'] = results.home_score - results.away_score
+results = results.drop(['home_score', 'away_score', 'home_team', 'away_team'], 1)
+results['winner'] = None
+results['winner'][results.score > 0] = 1
+results['winner'][results.score < 0] = -1
+results['winner'][results.score == 0] = 0
+results = results[results.winner != 0]
+
+results['att'] = results['att1'] - results['att2']
+results['def'] = results['def1'] - results['def2']
+results['mid'] = results['mid1'] - results['mid2']
+results['ovr'] = results['ovr1'] - results['ovr2']
+to_drop = results[results.winner == 1].sample(247)
+results = results.drop(labels=to_drop.index, axis=0)
+
+lr = LogisticRegression()
+lr.fit(x_train, y_train)
+rf = RandomForestClassifier()
+rf.fit(x_train, y_train)
+svc = SVC(kernel='linear')
+svc.fit(x_train, y_train)
+
+wc = read_pickle('world_cup_teams.pickle')
+wc.head()
+
+def match(wc, team1, team2, model):
+    
+    match = pd.DataFrame(columns=['att1','def1','mid1','ovr1','att2','def2','mid2','ovr2'], index=[0])
+    
+    match['att1'] = wc[wc.name == team1]['att'].iloc[0]
+    match['def1'] = wc[wc.name == team1]['def'].iloc[0]
+    match['mid1'] = wc[wc.name == team1]['mid'].iloc[0]
+    match['ovr1'] = wc[wc.name == team1]['ovr'].iloc[0]
+    
+    match['att2'] = wc[wc.name == team2]['att'].iloc[0]
+    match['def2'] = wc[wc.name == team2]['def'].iloc[0]
+    match['mid2'] = wc[wc.name == team2]['mid'].iloc[0]
+    match['ovr2'] = wc[wc.name == team2]['ovr'].iloc[0]
+    
+    match['att'] = match['att1'] - match['att2']
+    match['def'] = match['def1'] - match['def2']
+    match['mid'] = match['mid1'] - match['mid2']
+    match['ovr'] = match['ovr1'] - match['ovr2']
+    
+    match = match[['att', 'def', 'mid', 'ovr']]
+    
+    match_array = match.values
+    
+    prediction = model.predict(match_array)
+    
+    winner = None
+    
+    if prediction == 1:
+        winner = team1
+    elif prediction == -1:
+        winner = team2
+  
+match(wc, 'brazil', 'spain', svc) 
+
+
+def match(wc, team1, team2, model, random_scale=5):
+    
+    match = pd.DataFrame(columns=['att1','def1','mid1','ovr1','att2','def2','mid2','ovr2'], index=[0])
+    
+    att1 = wc[wc.name == team1]['att'].iloc[0]
+    def1 = wc[wc.name == team1]['def'].iloc[0]
+    mid1 = wc[wc.name == team1]['mid'].iloc[0]
+    ovr1 = wc[wc.name == team1]['ovr'].iloc[0]
+    att2 = wc[wc.name == team2]['att'].iloc[0]
+    def2 = wc[wc.name == team2]['def'].iloc[0]
+    mid2 = wc[wc.name == team2]['mid'].iloc[0]
+    ovr2 = wc[wc.name == team2]['ovr'].iloc[0]
+    
+    match['att1'] = np.random.normal(att1, scale=random_scale)
+    match['def1'] = np.random.normal(def1, scale=random_scale)
+    match['mid1'] = np.random.normal(mid1, scale=random_scale)
+    match['ovr1'] = np.random.normal(ovr1, scale=random_scale)
+    match['att2'] = np.random.normal(att2, scale=random_scale)
+    match['def2'] = np.random.normal(def2, scale=random_scale)
+    match['mid2'] = np.random.normal(mid2, scale=random_scale)
+    match['ovr2'] = np.random.normal(ovr2, scale=random_scale)
+    
+    match['att'] = match['att1'] - match['att2']
+    match['def'] = match['def1'] - match['def2']
+    match['mid'] = match['mid1'] - match['mid2']
+    match['ovr'] = match['ovr1'] - match['ovr2']
+    
+    match = match[['att', 'def', 'mid', 'ovr']]
+    
+    match_array = match.values
+    
+    prediction = model.predict(match_array)
+    
+    winner = None
+    
+    if prediction == 1:
+        winner = team1
+    elif prediction == -1:
+        winner = team2
+    
+    return winner
+    
+def simulate_matches(team1, team2, n_matches=10000):
+    
+    match_results = []
+    for i in range(n_matches):
+        match_results.append(match(wc, team1, team2, svc, random_scale=5))
+        
+    team1_proba = match_results.count(team1)/len(match_results)*100
+    team2_proba = match_results.count(team2)/len(match_results)*100
+    
+    print(team1, str(round(team1_proba, 2)) + '%')
+    print(team2, str(round(team2_proba,2)) + '%')
+    print('-------------------------')
+    print()
+    
+    if team1_proba > team2_proba:
+        overall_winner = team1
+    else:
+        overall_winner = team2
+    
+    return {'team1': team1,
+            'team2': team2,
+            'team1_proba': team1_proba, 
+            'team2_proba': team2_proba, 
+            'overall_winner': overall_winner,
+            'match_results': match_results}
+
+simulation_test = simulate_matches('croatia', 'denmark', n_matches=10000)
+
+p_list = []
+for i in range(len(simulation_test['match_results'])):
+    denmark = simulation_test['match_results'][:i].count('denmark') / (i+1) * 100
+    croatia = simulation_test['match_results'][:i].count('croatia') / (i+1) * 100
+    p_list.append(denmark - croatia)
+    
+spain_proba = 0.817 * 0.862 * 0.718 * 0.593 * 100 * (0.7 ** 4)
+print('Chance of Spain winning:', str(round(spain_proba,2)) + '%')
