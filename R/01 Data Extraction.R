@@ -1,5 +1,5 @@
 # Package names
-packages <- c("dplyr", "ggplot2", "rvest", "htmltab", "httr", "XML")
+packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex")
 
 # Install packages not yet installed
 installed_packages <- packages %in% rownames(installed.packages())
@@ -81,7 +81,13 @@ federations <- do.call("rbind", list(OFC, AFC, CONCACAF, CAF, CONMEBOL, UEFA))
 federations <- federations %>%
   filter(!grepl('members', Abbreviation))
 
-rm(OFC, AFC, CONCACAF, CAF, CONMEBOL, UEFA, federationPage)
+AssociationsToFix <- federations[federations$Association %like% "]", ]
+AssociationsToFix$Association <- rm_between(AssociationsToFix$Association, "[", "]")
+
+federations <- rbind(federations, AssociationsToFix)
+federations <- federations[!federations$Association %like% "]", ]
+
+rm(OFC, AFC, CONCACAF, CAF, CONMEBOL, UEFA, federationPage, AssociationsToFix)
 
 # Step 2: Extract Player Data
 players_df <- data.frame()
