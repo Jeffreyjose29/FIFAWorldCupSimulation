@@ -89,6 +89,38 @@ federations <- federations[!federations$Association %like% "]", ]
 
 rm(OFC, AFC, CONCACAF, CAF, CONMEBOL, UEFA, federationPage, AssociationsToFix)
 
+# Step 2: Extract Intl. Match Matrix
+IntlMatches <- read.csv("intlMatches.csv", header = TRUE)
+IntlShootouts <- read.csv("ShootOuts.csv", header = TRUE)
+
+# Restrict to after 1930 when the first world cup was
+IntlMatches <- IntlMatches %>%
+  filter(date >= "1930-07-13")
+IntlShootouts <- IntlShootouts %>%
+  filter(date >= "1930-07-13")
+
+IntlMatches <- left_join(IntlMatches, IntlShootouts, by = c("date" = "date", "home_team" = "home_team", "away_team" = "away_team"))
+
+IntlMatches$winnerFinal <- if_else(IntlMatches$home_score > IntlMatches$away_score, IntlMatches$home_team, 
+                              if_else(IntlMatches$away_score > IntlMatches$home_score, IntlMatches$away_team,
+                                      if_else(is.na(IntlMatches$winner), "Draw", IntlMatches$winner)
+                              )
+)
+
+IntlMatches$resultYielded <- if_else(IntlMatches$winnerFinal == "Draw", "Draw", "Result")
+IntlMatches %>%
+  group_by(resultYielded) %>%
+  summarise(Count = n())
+
+IntlMatches$Teams <- if_else(IntlMatches$home_team > IntlMatches$away_team, paste(IntlMatches$home_team, '-', IntlMatches$away_team),
+                             paste(IntlMatches$away_team, '-', IntlMatches$home_team))
+IntlMatches <- IntlMatches %>%
+  filter(resultYielded == "Result")
+
+AllMatchesResult <- IntlMatches %>%
+  group_by(Teams) %>%
+  summarise(NumMatches = n())
+
 # Step 2: Extract Player Data
 players_df <- data.frame()
 for(i in 1:570){
