@@ -10,6 +10,9 @@ if (any(installed_packages == FALSE)) {
 # Packages loading
 invisible(lapply(packages, library, character.only = TRUE))
 
+# Set Working Directory
+setwd("C:/Users/jeffr/OneDrive/Desktop/Github Activities/FIFAWorldCupSimulation/Data")
+
 # Step 1: Get each country and the federation they belong to
 federationPage <- read_html("https://en.wikipedia.org/wiki/Oceania_Football_Confederation")
 OFC <- federationPage %>%
@@ -75,10 +78,12 @@ UEFA <- UEFA %>%
 
 # Bind all the federations together
 federations <- do.call("rbind", list(OFC, AFC, CONCACAF, CAF, CONMEBOL, UEFA))
+federations <- federations %>%
+  filter(!grepl('members', Abbreviation))
 
 rm(OFC, AFC, CONCACAF, CAF, CONMEBOL, UEFA, federationPage)
 
- # Step 1: Loading player data
+# Step 2: Extract Player Data
 players_df <- data.frame()
 for(i in 1:570){
   playersLink <- paste("https://www.fifaindex.com/players/fifa23_552/?page=", i, sep = "")
@@ -94,3 +99,7 @@ playersLink <- "https://www.fifaindex.com/players/fifa23_552/"
 driver <- read_html(playersLink)
 allTables <- html_nodes(driver, css = "table")
 players <- html_table(allTables)[[1]]
+
+
+# Step 4: Write out the extracted datasets to a .csv file for back-up
+write.csv(federations, "Federations.csv", row.names = FALSE)
