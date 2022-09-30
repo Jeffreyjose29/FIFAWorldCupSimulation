@@ -112,14 +112,33 @@ IntlMatches %>%
   group_by(resultYielded) %>%
   summarise(Count = n())
 
-IntlMatches$Teams <- if_else(IntlMatches$home_team > IntlMatches$away_team, paste(IntlMatches$home_team, '-', IntlMatches$away_team),
-                             paste(IntlMatches$away_team, '-', IntlMatches$home_team))
+
 IntlMatches <- IntlMatches %>%
   filter(resultYielded == "Result")
 
+IntlMatches$Team1 <- IntlMatches$home_team
+IntlMatches$Team2 <- IntlMatches$away_team
+
+IntlMatches <- transform(IntlMatches, Team1 = pmin(Team1, Team2), Team2 = pmax(Team1, Team2))
+
+IntlMatches$MatchTeams <- paste(IntlMatches$Team1, '-', IntlMatches$Team2)
+
+IntlMatches$winner <- NULL
+
+IntlMatches$winnerByTeam1 <- if_else(IntlMatches$winnerFinal == IntlMatches$Team1, 1, 0)
+IntlMatches$winnerByTeam2 <- if_else(IntlMatches$winnerFinal == IntlMatches$Team2, 1, 0)
+
 AllMatchesResult <- IntlMatches %>%
-  group_by(Teams) %>%
-  summarise(NumMatches = n())
+  group_by(MatchTeams) %>%
+  summarise(NumMatches = n(),
+            Team1Winner = sum(winnerByTeam1),
+            Team2Winner = sum(winnerByTeam2))
+
+# Create decimal for wins
+AllMatchesResult$Team1Winner <- round(AllMatchesResult$Team1Winner / AllMatchesResult$NumMatches, 2)
+AllMatchesResult$Team2Winner <- round(AllMatchesResult$Team2Winner / AllMatchesResult$NumMatches, 2)
+
+
 
 # Step 2: Extract Player Data
 players_df <- data.frame()
