@@ -236,6 +236,44 @@ players_df$Overall <- substr(players_df$Overall, start = 1, stop = 2)
 
 playingPositions <- c("GK", "SW", "RWB", "RB", "CB", "LWB", "LB", "CDM", "CM", "RM", "LM", "CAM", "CF", "RW", "LW", "ST")
 
+players_df$GK <- ifelse(grepl("GK", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "GK", NA)
+players_df$SW <- ifelse(grepl("SW", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "SW", NA)
+players_df$RWB <- ifelse(grepl("RWB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "RWB", NA)
+players_df$RB <- ifelse(grepl("RB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "RB", NA)
+players_df$CB <- ifelse(grepl("CB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CB", NA)
+players_df$LWB <- ifelse(grepl("LWB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "LWB", NA)
+players_df$LB <- ifelse(grepl("LB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "LB", NA)
+players_df$CDM <- ifelse(grepl("CDM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CDM", NA)
+players_df$CM <- ifelse(grepl("CM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CM", NA)
+players_df$RM <- ifelse(grepl("RM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "RM", NA)
+players_df$LM <- ifelse(grepl("LM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "LM", NA)
+players_df$CAM <- ifelse(grepl("CAM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CAM", NA)
+players_df$CF <- ifelse(grepl("CF", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CF", NA)
+players_df$RW <- ifelse(grepl("RW", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "RW", NA)
+players_df$LW <- ifelse(grepl("LW", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "LW", NA)
+players_df$ST <- ifelse(grepl("ST", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "ST", NA)
+
+
+players_df$Position <- paste(players_df$GK, ",",
+                              players_df$SW, ",",
+                              players_df$RWB, ",",
+                              players_df$RB, ",",
+                              players_df$CB, ",",
+                              players_df$LWB, ",",
+                              players_df$LB, ",",
+                              players_df$CDM, ",",
+                              players_df$CM, ",",
+                              players_df$RM, ",",
+                              players_df$LM, ",",
+                              players_df$CAM, ",",
+                              players_df$CF, ",",
+                              players_df$RW, ",",
+                              players_df$LW, ",",
+                              players_df$ST, ",",
+                             collapse = ' ',
+                             na.skip = TRUE)
+
+
 for (i in 1:length(players_df$`Preferred Positions`)) {
   string <- players_df$`Preferred Positions`[i]
   findWords <- intersect(unlist(strsplit(string," ")),playingPositions)
@@ -245,6 +283,7 @@ for (i in 1:length(players_df$`Preferred Positions`)) {
     }
   }
 }
+
 
 
 
