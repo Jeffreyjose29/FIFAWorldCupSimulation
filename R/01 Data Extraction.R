@@ -143,12 +143,38 @@ AllMatchesResult$Team2 <- word(AllMatchesResult$MatchTeams, 2, sep = "-")
 AllMatchesResult <- AllMatchesResult %>% 
   mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
 
+AllMatchResultInverted <- AllMatchesResult
+AllMatchResultInverted$Team1FirstLetter <- substr(AllMatchResultInverted$Team1, 1, 1)
+AllMatchResultInverted$Team2FirstLetter <- substr(AllMatchResultInverted$Team2, 1, 1)
+AllMatchResultInverted$Team2AfterTeam1 <- if_else(AllMatchResultInverted$Team2FirstLetter > AllMatchResultInverted$Team1FirstLetter, TRUE, FALSE)
+AllMatchResultInverted <- AllMatchResultInverted %>%
+  filter(Team2AfterTeam1 == "TRUE")
+tmp <- AllMatchResultInverted[5]
+AllMatchResultInverted[5] <- AllMatchResultInverted[6]
+AllMatchResultInverted[6] <- tmp
+# Score Swapping
+tmp <- AllMatchResultInverted[3]
+AllMatchResultInverted[3] <- AllMatchResultInverted[4]
+AllMatchResultInverted[4] <- tmp
+AllMatchResultInverted <- AllMatchResultInverted %>%
+  select(MatchTeams, NumMatches, Team1Winner, Team2Winner, Team1, Team2)
+
+# Rbind both inverted and all matches df
+AllMatchesResult <- rbind(AllMatchesResult, AllMatchResultInverted)
+
+
 # Number of distinct teams
 distinct_teams <- n_distinct(AllMatchesResult$Team1)
 
 #Attempt to create matrix
 matrix_df <- as.data.frame(matrix(0, ncol = distinct_teams, nrow = distinct_teams))
 teams <- unique(AllMatchesResult$Team1)
+
+colnames(matrix_df) <- teams
+rownames(matrix_df) <- teams
+
+# Set all 0 to NA
+matrix_df[matrix_df == 0] <- NA
 
 for(i in 1:nrow(matrix_df)){
   currentTeam <- row.names(matrix_df)[i]
@@ -186,6 +212,7 @@ matrix_df <- subset(matrix_df, rownames(matrix_df) %in% c("Qatar", "Ecuador", "S
                                   "Portugal", "Ghana", "Uruguay", "SouthKorea")
 )
 matrix_df <- matrix_df[, worldCupTeams]
+matrix_df <- matrix_df[, order(colnames(matrix_df))]
 
 
 # Step 2: Extract Player Data
