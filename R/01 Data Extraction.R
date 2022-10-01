@@ -1,5 +1,5 @@
 # Package names
-packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr")
+packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr", "htmltab", "tidyr")
 
 # Install packages not yet installed
 installed_packages <- packages %in% rownames(installed.packages())
@@ -221,16 +221,31 @@ for(i in 1:570){
   playersLink <- paste("https://www.fifaindex.com/players/fifa23_552/?page=", i, sep = "")
   htmlDriver <- read_html(playersLink)
   playersTableIndex <- html_nodes(htmlDriver, css = "table")
-  
+  allTables <- html_nodes(htmlDriver, css = "table")
   players_placeholder <- html_table(allTables)[[1]]
   
   players_df <- rbind(players_df, players_placeholder)
 }
 
-playersLink <- "https://www.fifaindex.com/players/fifa23_552/"
-driver <- read_html(playersLink)
-allTables <- html_nodes(driver, css = "table")
-players <- html_table(allTables)[[1]]
+players_df <- players_df %>%
+  drop_na(`OVR-POT`) %>%
+  select(`OVR-POT`, Name, `Preferred Positions`, Age) %>%
+  rename("Overall" = `OVR-POT`)
+
+players_df$Overall <- substr(players_df$Overall, start = 1, stop = 2)
+
+playingPositions <- c("GK", "SW", "RWB", "RB", "CB", "LWB", "LB", "CDM", "CM", "RM", "LM", "CAM", "CF", "RW", "LW", "ST")
+
+for (i in 1:length(players_df$`Preferred Positions`)) {
+  string <- players_df$`Preferred Positions`[i]
+  findWords <- intersect(unlist(strsplit(string," ")),playingPositions)
+  if (!is.null(findWords)) {
+    for (j in findWords) {
+      players_df$`Preferred Positions`[i] <- gsub(j,paste0(j,","),string)
+    }
+  }
+}
+
 
 
 # Step 4: Write out the extracted datasets to a .csv file for back-up
