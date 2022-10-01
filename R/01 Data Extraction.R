@@ -1,5 +1,5 @@
 # Package names
-packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex")
+packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr")
 
 # Install packages not yet installed
 installed_packages <- packages %in% rownames(installed.packages())
@@ -137,7 +137,55 @@ AllMatchesResult <- IntlMatches %>%
 # Create decimal for wins
 AllMatchesResult$Team1Winner <- round(AllMatchesResult$Team1Winner / AllMatchesResult$NumMatches, 2)
 AllMatchesResult$Team2Winner <- round(AllMatchesResult$Team2Winner / AllMatchesResult$NumMatches, 2)
+AllMatchesResult$Team1 <- sub("\\-.*", "", AllMatchesResult$MatchTeams)
+AllMatchesResult$Team2 <- word(AllMatchesResult$MatchTeams, 2, sep = "-")
 
+AllMatchesResult <- AllMatchesResult %>% 
+  mutate(across(where(is.character), str_remove_all, pattern = fixed(" ")))
+
+# Number of distinct teams
+distinct_teams <- n_distinct(AllMatchesResult$Team1)
+
+#Attempt to create matrix
+matrix_df <- as.data.frame(matrix(0, ncol = distinct_teams, nrow = distinct_teams))
+teams <- unique(AllMatchesResult$Team1)
+
+for(i in 1:nrow(matrix_df)){
+  currentTeam <- row.names(matrix_df)[i]
+  
+  filteredMatches <- AllMatchesResult %>%
+    filter(Team1 == currentTeam)
+  
+  for(j in 1:nrow(filteredMatches)){
+    Team2Column <- filteredMatches[j, 6]
+    
+    for(k in 1:ncol(matrix_df)){
+      if(colnames(matrix_df)[k] == Team2Column){
+        matrix_df[i, k] <- filteredMatches[j, 3]
+      }
+    }
+  }
+}
+
+worldCupTeams <- c("Qatar", "Ecuador", "Senegal", "Netherlands",
+                   "England", "Iran", "UnitedStates", "Wales",
+                   "Argentina", "SaudiArabia", "Mexico", "Poland",
+                   "France", "Australia", "Denmark", "Tunisia",
+                   "Spain", "CostaRica", "Germany", "Japan",
+                   "Belgium", "Canada", "Morocco", "Croatia",
+                   "Brazil", "Serbia", "Switzerland", "Cameroon",
+                   "Portugal", "Ghana", "Uruguay", "SouthKorea")
+
+matrix_df <- subset(matrix_df, rownames(matrix_df) %in% c("Qatar", "Ecuador", "Senegal", "Netherlands",
+                                  "England", "Iran", "UnitedStates", "Wales",
+                                  "Argentina", "SaudiArabia", "Mexico", "Poland",
+                                  "France", "Australia", "Denmark", "Tunisia",
+                                  "Spain", "CostaRica", "Germany", "Japan",
+                                  "Belgium", "Canada", "Morocco", "Croatia",
+                                  "Brazil", "Serbia", "Switzerland", "Cameroon",
+                                  "Portugal", "Ghana", "Uruguay", "SouthKorea")
+)
+matrix_df <- matrix_df[, worldCupTeams]
 
 
 # Step 2: Extract Player Data
