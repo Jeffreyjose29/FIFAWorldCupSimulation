@@ -286,7 +286,18 @@ setwd(dataFolder)
 
 players_df <- read.csv("players_fifa23.csv", header = TRUE)
 
+worldCupTeams <- c("Qatar", "Ecuador", "Senegal", "Netherlands",
+                   "England", "Iran", "United States", "Wales",
+                   "Argentina", "Saudi Arabia", "Mexico", "Poland",
+                   "France", "Australia", "Denmark", "Tunisia",
+                   "Spain", "Costa Rica", "Germany", "Japan",
+                   "Belgium", "Canada", "Morocco", "Croatia",
+                   "Brazil", "Serbia", "Switzerland", "Cameroon",
+                   "Portugal", "Ghana", "Uruguay", "Korea Republic")
 
+players_df <- players_df %>%
+  filter(Nationality %in% worldCupTeams)
+unique(players_df$Nationality)
 
 # Step 4: Write out the extracted datasets to a .csv file for back-up
 write.csv(federations, "Federations.csv", row.names = FALSE)
