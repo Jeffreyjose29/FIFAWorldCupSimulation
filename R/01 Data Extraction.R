@@ -1,5 +1,10 @@
+###################################################
+## File Name: 01 Data Extraction
+## Date: 16th September 2022
+###################################################
+
 # Package names
-packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr", "htmltab", "tidyr", "httr")
+packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr", "htmltab", "tidyr")
 
 # Install packages not yet installed
 installed_packages <- packages %in% rownames(installed.packages())
