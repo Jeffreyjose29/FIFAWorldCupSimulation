@@ -1,5 +1,5 @@
 # Package names
-packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr", "htmltab", "tidyr", "RSelenium")
+packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr", "htmltab", "tidyr", "httr")
 
 # Install packages not yet installed
 installed_packages <- packages %in% rownames(installed.packages())
@@ -11,7 +11,8 @@ if (any(installed_packages == FALSE)) {
 invisible(lapply(packages, library, character.only = TRUE))
 
 # Set Working Directory
-setwd("C:/Users/jeffr/OneDrive/Desktop/Github Activities/FIFAWorldCupSimulation/Data")
+dataFolder <- "C:/Users/jeffr/OneDrive/Desktop/Github Activities/FIFAWorldCupSimulation/Data"
+setwd(dataFolder)
 
 # Step 1: Get each country and the federation they belong to
 federationPage <- read_html("https://en.wikipedia.org/wiki/Oceania_Football_Confederation")
@@ -259,84 +260,33 @@ matrix_df["Switzerland", "SouthKorea"] <- round(0.50, 2)
 matrix_df["Switzerland", "Spain"] <- round(0.06, 2)
 matrix_df["Uruguay", "UnitedStates"] <- round(0.33, 2)
 
+rownames(matrix_df) <- case_when(rownames(matrix_df) == "UnitedStates" ~ "United States",
+                                 rownames(matrix_df) == "SouthKorea" ~ "Korea Republic",
+                                 rownames(matrix_df) == "SaudiArabia" ~ "Saudi Arabia",
+                                 rownames(matrix_df) == "CostaRica" ~ "Costa Rica",
+                                 TRUE ~ rownames(matrix_df))
+colnames(matrix_df) <- case_when(colnames(matrix_df) == "UnitedStates" ~ "United States",
+                                 colnames(matrix_df) == "SouthKorea" ~ "Korea Republic",
+                                 colnames(matrix_df) == "SaudiArabia" ~ "Saudi Arabia",
+                                 colnames(matrix_df) == "CostaRica" ~ "Costa Rica",
+                                 TRUE ~ colnames(matrix_df))
 
 # Step 2: Extract Player Data
-players_df <- data.frame()
-for(i in 1:570){
-  playersLink <- paste("https://www.fifaindex.com/players/fifa23_552/?page=", i, sep = "")
-  htmlDriver <- read_html(playersLink)
-  playersTableIndex <- html_nodes(htmlDriver, css = "table")
-  allTables <- html_nodes(htmlDriver, css = "table")
-  players_placeholder <- html_table(allTables)[[1]]
-  
-  players_df <- rbind(players_df, players_placeholder)
-}
+
+# .csv download link - https://www.kaggle.com/datasets/cashncarry/fifa-23-complete-player-dataset
+downloadsFolder <- "C:/Users/jeffr/Downloads/"
+setwd(downloadsFolder)
+unzip("players_fifa23.csv.zip", exdir = downloadsFolder)
+file.remove("players_fifa23.csv.zip")
+
+file.copy(from = paste0(downloadsFolder, "players_fifa23.csv"),
+          to = paste0(dataFolder, "/players_fifa23.csv"))
+file.remove("players_fifa23.csv")
+setwd(dataFolder)
+
+players_df <- read.csv("players_fifa23.csv", header = TRUE)
 
 
-################## Trialing Data Extraction
-link <- "https://www.fifaindex.com/players/fifa23_552/?page=1"
-driver <- read_html(link)
-tableIndex <- html_nodes(driver, css = "table")
-tables <- html_nodes(driver, css = "table")
-players_placeholder <- html_table(tables)[[1]]
-
-test <- link %>% read_html %>%
-  html_node(xpath = '/html/body/main/div/div/div[2]/div[3]/table/tbody/tr[1]/td[2]/a') %>%
-  html_attr(., "title")
-
-federationPage <- read_html("https://en.wikipedia.org/wiki/Confederation_of_African_Football")
-CAF <- federationPage %>%
-  html_node(xpath = '/html/body/div[3]/div[3]/div[5]/div[1]/table[4]')  %>% html_table()
-CAF$Federation <- "CAF"
-colnames(CAF)[1] <- "Abbreviation"
-CAF <- CAF %>%
-  select(Abbreviation, Association, `IOC member`, Federation) %>%
-  filter(!grepl(')', Abbreviation))
-
-
-"https://www.fifaindex.com/players/fifa23_552/?page=1" %>% 
-  read_html() %>% 
-  html_nodes(":contains('link-nation')") %>% # search for string. Note the separate types of quotations
-  xml2::xml_attrs() %>% # show all the attributes the string belongs to
-  purrr::map("class") %>% # pull just 'class' attrs from the list
-  unlist %>% unique
-
-
-###########################################
-players_df <- players_df %>%
-  drop_na(`OVR-POT`) %>%
-  select(`OVR-POT`, Name, `Preferred Positions`, Age) %>%
-  rename("Overall" = `OVR-POT`)
-
-players_df$Overall <- substr(players_df$Overall, start = 1, stop = 2)
-
-playingPositions <- c("GK", "SW", "RWB", "RB", "CB", "LWB", "LB", "CDM", "CM", "RM", "LM", "CAM", "CF", "RW", "LW", "ST")
-
-players_df$GK <- ifelse(grepl("GK", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "GK,", NA)
-players_df$SW <- ifelse(grepl("SW", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "SW,", NA)
-players_df$RWB <- ifelse(grepl("RWB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "RWB,", NA)
-players_df$RB <- ifelse(grepl("RB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "RB,", NA)
-players_df$CB <- ifelse(grepl("CB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CB,", NA)
-players_df$LWB <- ifelse(grepl("LWB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "LWB,", NA)
-players_df$LB <- ifelse(grepl("LB", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "LB,", NA)
-players_df$CDM <- ifelse(grepl("CDM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CDM,", NA)
-players_df$CM <- ifelse(grepl("CM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CM,", NA)
-players_df$RM <- ifelse(grepl("RM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "RM,", NA)
-players_df$LM <- ifelse(grepl("LM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "LM,", NA)
-players_df$CAM <- ifelse(grepl("CAM", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CAM,", NA)
-players_df$CF <- ifelse(grepl("CF", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "CF,", NA)
-players_df$RW <- ifelse(grepl("RW", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "RW,", NA)
-players_df$LW <- ifelse(grepl("LW", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "LW,", NA)
-players_df$ST <- ifelse(grepl("ST", players_df$`Preferred Positions`, fixed = TRUE) == TRUE, "ST,", NA)
-
-players_df <- players_df  %>%
-  mutate_all(~str_replace_na(., "")) %>%
-  mutate(`Preferred Positions` = paste0(GK, SW, RWB, RB, CB, LWB, LB, CDM, CM, RM, LM, 
-                            CAM, CF, RW, LW, ST))
-players_df$`Preferred Positions` <- substr(players_df$`Preferred Positions`,1,nchar(players_df$`Preferred Positions`)-1)
-
-players_df <- players_df %>%
-  select(Overall, Name, `Preferred Positions`, Age)
 
 # Step 4: Write out the extracted datasets to a .csv file for back-up
 write.csv(federations, "Federations.csv", row.names = FALSE)
