@@ -93,23 +93,40 @@ GROUP.H <- c("Portugal", "Ghana", "Uruguay", "Korea Republic")
 
 # Running simulation for each group
 GROUP.A.DATASET <- as.data.frame(GROUP.A) %>%
-  add_column(Points = NA)
+  add_column(Points = NA) %>%
+  rename('Teams' = GROUP.A)
 GROUP.B.DATASET <- as.data.frame(GROUP.B) %>%
-  add_column(Points = NA)
+  add_column(Points = NA) %>%
+  rename('Teams' = GROUP.B)
 GROUP.C.DATASET <- as.data.frame(GROUP.C) %>%
-  add_column(Points = NA)
+  add_column(Points = NA) %>%
+  rename('Teams' = GROUP.C)
 GROUP.D.DATASET <- as.data.frame(GROUP.D) %>%
-  add_column(Points = NA)
+  add_column(Points = NA) %>%
+  rename('Teams' = GROUP.D)
 GROUP.E.DATASET <- as.data.frame(GROUP.E) %>%
-  add_column(Points = NA)
+  add_column(Points = NA) %>%
+  rename('Teams' = GROUP.E)
 GROUP.F.DATASET <- as.data.frame(GROUP.F) %>%
-  add_column(Points = NA)
+  add_column(Points = NA) %>%
+  rename('Teams' = GROUP.F)
 GROUP.G.DATASET <- as.data.frame(GROUP.G) %>%
-  add_column(Points = NA)
+  add_column(Points = NA) %>%
+  rename('Teams' = GROUP.G)
 GROUP.H.DATASET <- as.data.frame(GROUP.H) %>%
-  add_column(Points = NA)
+  add_column(Points = NA) %>%
+  rename('Teams' = GROUP.H)
 
+QatarCounter <- 0
+EcuadorCounter <- 0
 for(i in 1:SIMULATION.NUMBER){
   # SIMULATING GROUP A
+  if(match_up(GROUP.A[1], GROUP.A[2]) == GROUP.A[1]){
+    QatarCounter <- QatarCounter + 1
+  }else{
+    EcuadorCounter <- EcuadorCounter + 1
+  }
   
 }
+
+permn(GROUP.A[1:2])

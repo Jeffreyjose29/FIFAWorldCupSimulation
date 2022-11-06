@@ -4,7 +4,7 @@
 ###################################################
 
 # Package names
-packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr", "htmltab", "tidyr", "tibble")
+packages <- c("dplyr", "ggplot2", "rvest", "data.table", "qdapRegex", "stringr", "htmltab", "tidyr", "tibble", "combinat")
 
 # Install packages not yet installed
 installed_packages <- packages %in% rownames(installed.packages())
