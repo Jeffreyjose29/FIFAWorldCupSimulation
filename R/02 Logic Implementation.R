@@ -5,11 +5,11 @@
 
 
 # KEY VARIABLES
-N <- 5000 # number of simulations
+SIMULATION.NUMBER <- 5000
 PLAYER.WEIGHT <- 0.90 # % of score based on players
 H2H.WEIGHT <- 0.10 # % of score based on previous head-to-head
 STD <- 10 # "randomness" sampled from a normal distribution with standard deviation 
-RANDAM.WEIGHT <- 10
+RANDAM.WEIGHT <- 0.50
 
 
 playerNationality <- players_df$Nationality %>% table() %>% as.matrix()
@@ -78,3 +78,38 @@ match_up <- function(c1, c2){
 }
 
 match_up("Brazil", "Senegal")
+
+
+# Initialising the groups
+GROUP.A <- c("Qatar", "Ecuador", "Senegal", "Netherlands")
+GROUP.B <- c("England", "United States", "Wales", "Iran")
+GROUP.C <- c("Argentina", "Saudi Arabia", "Mexico", "Poland")
+GROUP.D <- c("France", "Australia", "Denmark", "Tunisia")
+GROUP.E <- c("Spain", "Costa Rica", "Germany", "Japan")
+GROUP.F <- c("Belgium", "Canada", "Morocco", "Croatia")
+GROUP.G <- c("Brazil", "Serbia", "Switzerland", "Cameroon")
+GROUP.H <- c("Portugal", "Ghana", "Uruguay", "Korea Republic")
+
+
+# Running simulation for each group
+GROUP.A.DATASET <- as.data.frame(GROUP.A) %>%
+  add_column(Points = NA)
+GROUP.B.DATASET <- as.data.frame(GROUP.B) %>%
+  add_column(Points = NA)
+GROUP.C.DATASET <- as.data.frame(GROUP.C) %>%
+  add_column(Points = NA)
+GROUP.D.DATASET <- as.data.frame(GROUP.D) %>%
+  add_column(Points = NA)
+GROUP.E.DATASET <- as.data.frame(GROUP.E) %>%
+  add_column(Points = NA)
+GROUP.F.DATASET <- as.data.frame(GROUP.F) %>%
+  add_column(Points = NA)
+GROUP.G.DATASET <- as.data.frame(GROUP.G) %>%
+  add_column(Points = NA)
+GROUP.H.DATASET <- as.data.frame(GROUP.H) %>%
+  add_column(Points = NA)
+
+for(i in 1:SIMULATION.NUMBER){
+  # SIMULATING GROUP A
+  
+}
