@@ -5,7 +5,7 @@
 
 
 # KEY VARIABLES
-SIMULATION.NUMBER <- 5000
+SIMULATION.NUMBER <- 500
 PLAYER.WEIGHT <- 0.90 # % of score based on players
 H2H.WEIGHT <- 0.10 # % of score based on previous head-to-head
 STD <- 10 # "randomness" sampled from a normal distribution with standard deviation 
@@ -38,7 +38,7 @@ countries.df <- data.frame(Organization = c('CONMEBOL',
                                             'OFC', 
                                             'CAF', 
                                             'UEFA'),
-                           Spots = c(4, 4, 3, 0, 5, 13))
+                           Spots = c(4, 5, 3, 0, 5, 13))
 
 for(i in 1:length(countries.df$Organization)){
   sub <- overallsAverages_df %>% filter(Federation == countries.df$Organization[i])
@@ -92,41 +92,94 @@ GROUP.H <- c("Portugal", "Ghana", "Uruguay", "Korea Republic")
 
 
 # Running simulation for each group
-GROUP.A.DATASET <- as.data.frame(GROUP.A) %>%
-  add_column(Points = NA) %>%
-  rename('Teams' = GROUP.A)
-GROUP.B.DATASET <- as.data.frame(GROUP.B) %>%
-  add_column(Points = NA) %>%
-  rename('Teams' = GROUP.B)
-GROUP.C.DATASET <- as.data.frame(GROUP.C) %>%
-  add_column(Points = NA) %>%
-  rename('Teams' = GROUP.C)
-GROUP.D.DATASET <- as.data.frame(GROUP.D) %>%
-  add_column(Points = NA) %>%
-  rename('Teams' = GROUP.D)
-GROUP.E.DATASET <- as.data.frame(GROUP.E) %>%
-  add_column(Points = NA) %>%
-  rename('Teams' = GROUP.E)
-GROUP.F.DATASET <- as.data.frame(GROUP.F) %>%
-  add_column(Points = NA) %>%
-  rename('Teams' = GROUP.F)
-GROUP.G.DATASET <- as.data.frame(GROUP.G) %>%
-  add_column(Points = NA) %>%
-  rename('Teams' = GROUP.G)
-GROUP.H.DATASET <- as.data.frame(GROUP.H) %>%
-  add_column(Points = NA) %>%
-  rename('Teams' = GROUP.H)
+GROUP.A.DATASET <- data.frame(Group = "Group A",
+                              Matchup = c(paste0(GROUP.A[1], "-", GROUP.A[2]),
+                              paste0(GROUP.A[1], "-", GROUP.A[3]),
+                              paste0(GROUP.A[1], "-", GROUP.A[4]),
+                              paste0(GROUP.A[2], "-", GROUP.A[3]),
+                              paste0(GROUP.A[2], "-", GROUP.A[4]),
+                              paste0(GROUP.A[3], "-", GROUP.A[4])))
 
-QatarCounter <- 0
-EcuadorCounter <- 0
-for(i in 1:SIMULATION.NUMBER){
-  # SIMULATING GROUP A
-  if(match_up(GROUP.A[1], GROUP.A[2]) == GROUP.A[1]){
-    QatarCounter <- QatarCounter + 1
-  }else{
-    EcuadorCounter <- EcuadorCounter + 1
+GROUP.B.DATASET <- data.frame(Group = "Group B",
+                              Matchup = c(paste0(GROUP.B[1], "-", GROUP.B[2]),
+                                          paste0(GROUP.B[1], "-", GROUP.B[3]),
+                                          paste0(GROUP.B[1], "-", GROUP.B[4]),
+                                          paste0(GROUP.B[2], "-", GROUP.B[3]),
+                                          paste0(GROUP.B[2], "-", GROUP.B[4]),
+                                          paste0(GROUP.B[3], "-", GROUP.B[4])))
+
+GROUP.C.DATASET <- data.frame(Group = "Group C",
+                              Matchup = c(paste0(GROUP.C[1], "-", GROUP.C[2]),
+                                          paste0(GROUP.C[1], "-", GROUP.C[3]),
+                                          paste0(GROUP.C[1], "-", GROUP.C[4]),
+                                          paste0(GROUP.C[2], "-", GROUP.C[3]),
+                                          paste0(GROUP.C[2], "-", GROUP.C[4]),
+                                          paste0(GROUP.C[3], "-", GROUP.C[4])))
+
+GROUP.D.DATASET <- data.frame(Group = "Group D",
+                              Matchup = c(paste0(GROUP.D[1], "-", GROUP.D[2]),
+                                          paste0(GROUP.D[1], "-", GROUP.D[3]),
+                                          paste0(GROUP.D[1], "-", GROUP.D[4]),
+                                          paste0(GROUP.D[2], "-", GROUP.D[3]),
+                                          paste0(GROUP.D[2], "-", GROUP.D[4]),
+                                          paste0(GROUP.D[3], "-", GROUP.D[4])))
+
+GROUP.E.DATASET <- data.frame(Group = "Group E",
+                              Matchup = c(paste0(GROUP.E[1], "-", GROUP.E[2]),
+                                          paste0(GROUP.E[1], "-", GROUP.E[3]),
+                                          paste0(GROUP.E[1], "-", GROUP.E[4]),
+                                          paste0(GROUP.E[2], "-", GROUP.E[3]),
+                                          paste0(GROUP.E[2], "-", GROUP.E[4]),
+                                          paste0(GROUP.E[3], "-", GROUP.E[4])))
+
+GROUP.F.DATASET <- data.frame(Group = "Group F",
+                              Matchup = c(paste0(GROUP.F[1], "-", GROUP.F[2]),
+                                          paste0(GROUP.F[1], "-", GROUP.F[3]),
+                                          paste0(GROUP.F[1], "-", GROUP.F[4]),
+                                          paste0(GROUP.F[2], "-", GROUP.F[3]),
+                                          paste0(GROUP.F[2], "-", GROUP.F[4]),
+                                          paste0(GROUP.F[3], "-", GROUP.F[4])))
+
+GROUP.G.DATASET <- data.frame(Group = "Group G",
+                              Matchup = c(paste0(GROUP.G[1], "-", GROUP.G[2]),
+                                          paste0(GROUP.G[1], "-", GROUP.G[3]),
+                                          paste0(GROUP.G[1], "-", GROUP.G[4]),
+                                          paste0(GROUP.G[2], "-", GROUP.G[3]),
+                                          paste0(GROUP.G[2], "-", GROUP.G[4]),
+                                          paste0(GROUP.G[3], "-", GROUP.G[4])))
+
+GROUP.H.DATASET <- data.frame(Group = "Group H",
+                              Matchup = c(paste0(GROUP.H[1], "-", GROUP.H[2]),
+                                          paste0(GROUP.H[1], "-", GROUP.H[3]),
+                                          paste0(GROUP.H[1], "-", GROUP.H[4]),
+                                          paste0(GROUP.H[2], "-", GROUP.H[3]),
+                                          paste0(GROUP.H[2], "-", GROUP.H[4]),
+                                          paste0(GROUP.H[3], "-", GROUP.H[4])))
+
+GROUPS.DATASET <- rbind(GROUP.A.DATASET, GROUP.B.DATASET, GROUP.C.DATASET, GROUP.D.DATASET, GROUP.E.DATASET, GROUP.F.DATASET,
+                        GROUP.G.DATASET, GROUP.H.DATASET)
+
+GROUPS.DATASET$`Team 1` <- sub("\\-.*", "", GROUPS.DATASET$Matchup)
+GROUPS.DATASET$`Team 2` <- sub('.*-', '', GROUPS.DATASET$Matchup)
+GROUPS.DATASET$`Team 1 Wins` <- 0
+GROUPS.DATASET$`Team 2 Wins` <- 0
+
+for(i in 1:nrow(GROUPS.DATASET)){
+  for(j in 1:SIMULATION.NUMBER){
+    if(match_up(GROUPS.DATASET[i, 3], GROUPS.DATASET[i, 4]) == GROUPS.DATASET[i, 3]){
+      GROUPS.DATASET[i, 5] <- GROUPS.DATASET[i, 5] + 1
+    }else{
+      GROUPS.DATASET[i, 6] <- GROUPS.DATASET[i, 6] + 1
+    }
   }
-  
 }
 
-permn(GROUP.A[1:2])
+GROUPS.DATASET$`Match Winner` <- if_else(GROUPS.DATASET$`Team 1 Wins` > GROUPS.DATASET$`Team 2 Wins`, GROUPS.DATASET$`Team 1`, GROUPS.DATASET$`Team 2`)
+
+GROUP.SUMMARY <- GROUPS.DATASET %>%
+  group_by(Group, `Match Winner`) %>%
+  summarise(`Win Num` = n()) %>%
+  arrange(Group, desc(`Win Num`)) %>%
+  group_by(Group) %>%
+  top_n(n = 2, wt = `Win Num`)
+
