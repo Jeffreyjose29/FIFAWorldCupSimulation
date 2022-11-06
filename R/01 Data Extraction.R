@@ -95,6 +95,8 @@ federations <- federations[!federations$Association %like% "]", ]
 
 rm(OFC, AFC, CONCACAF, CAF, CONMEBOL, UEFA, federationPage, AssociationsToFix)
 
+federationsCountryCombo <- federations
+
 # Step 2: Extract Intl. Match Matrix
 IntlMatches <- read.csv("intlMatches.csv", header = TRUE)
 IntlShootouts <- read.csv("ShootOuts.csv", header = TRUE)
