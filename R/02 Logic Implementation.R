@@ -181,5 +181,64 @@ GROUP.SUMMARY <- GROUPS.DATASET %>%
   summarise(`Win Num` = n()) %>%
   arrange(Group, desc(`Win Num`)) %>%
   group_by(Group) %>%
-  top_n(n = 2, wt = `Win Num`)
+  top_n(n = 2, wt = `Win Num`) %>%
+  mutate(Ranking = c(1, 2))
 
+GROUP.SUMMARY$`Group Ranking` <- c('1A', '2A', '1B', '2B', '1C', '2C', '1D', '2D', '1E', '2E', '1F', '2F', '1G', '2G', '1H', '2H')
+
+
+# Knockouts
+
+# 1A - 2B
+# 1B - 2A
+# 1C - 2D
+# 1D - 2C
+# 1E - 2F
+# 1F - 2E
+# 1G - 2H
+# 1H - 2G
+
+
+# Round of 16
+ROUND.OF.16 <- data.frame(`GroupWinner` = c('1A', '1B', '1C', '1D', '1E', '1F', '1G', '1H'),
+                          `GroupRunnerUp` = c('2B', '2A', '2D', '2C', '2F', '2E', '2H', '2G'),
+                          `GroupWinnerName` = NA,
+                          `RunnerUpName` = NA)
+
+
+GROUP.WINNER <- ROUND.OF.16 %>%
+  select(GroupWinner, GroupWinnerName) %>%
+  rename(`Group Ranking` = GroupWinner) %>%
+  mutate(GroupWinnerName = "Winner")
+
+GROUP.RUNNER.UP <- ROUND.OF.16 %>%
+  select(GroupRunnerUp, RunnerUpName) %>%
+  rename(`Group Ranking` = GroupRunnerUp) %>%
+  mutate(RunnerUpName = "Runner-Up")
+
+GROUP.WINNER <- full_join(GROUP.SUMMARY, GROUP.WINNER)
+GROUP.WINNER <- na.omit(GROUP.WINNER)
+GROUP.WINNER$`R16 Opponent` <- c('2B', '2A', '2D', '2C', '2F', '2E', '2H', '2G')
+
+GROUP.RUNNER.UP <- full_join(GROUP.SUMMARY, GROUP.RUNNER.UP)
+GROUP.RUNNER.UP <- na.omit(GROUP.RUNNER.UP)
+GROUP.RUNNER.UP <- GROUP.RUNNER.UP %>%
+  select(`Group Ranking`, `Match Winner`) %>%
+  rename(`R16 Opponent` = `Group Ranking`, `R16 Opponent Name` = `Match Winner`, `Group 1` = Group) 
+
+ROUND.OF.16 <- full_join(GROUP.WINNER, GROUP.RUNNER.UP)
+ROUND.OF.16$`Winner Games Won` <- 0
+ROUND.OF.16$`Runner-Up Games Won` <- 0
+
+write.csv(ROUND.OF.16, "R16.csv", row.names = FALSE)
+ROUND.OF.16 <- read.csv("R16.csv", header = TRUE)
+
+for(i in 1:nrow(ROUND.OF.16)){
+  for(j in 1:SIMULATION.NUMBER){
+    if(match_up(ROUND.OF.16[i, 2], ROUND.OF.16[i, 9]) == ROUND.OF.16[i, 2]){
+      ROUND.OF.16[i, 10] <- ROUND.OF.16[i, 10] + 1
+    }else{
+      ROUND.OF.16[i, 11] <- ROUND.OF.16[i, 11] + 1
+    }
+  }
+}
