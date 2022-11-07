@@ -283,3 +283,62 @@ for(i in 1:nrow(QUARTER.FINAL)){
 }
 
 QUARTER.FINAL$`Match Winner` <- if_else(QUARTER.FINAL$`Team 1 Points`> QUARTER.FINAL$`Team 2 Points`, QUARTER.FINAL$Team.1, QUARTER.FINAL$Team.2)
+
+# Semi Finals
+SEMI.FINAL <- data.frame(`Team 1` = c(NA, NA), 
+                          `Team 2` = c(NA, NA))
+
+for(a in 1:nrow(QUARTER.FINAL)){
+  if(a == 1){
+    SEMI.FINAL[1, 1] <- QUARTER.FINAL[a, 5]
+  }else if(a == 2){
+    SEMI.FINAL[2, 1] <- QUARTER.FINAL[a, 5]
+  }else if(a == 3){
+    SEMI.FINAL[1, 2] <- QUARTER.FINAL[a, 5]
+  }else{
+    SEMI.FINAL[2, 2] <- QUARTER.FINAL[a, 5]
+  }
+}
+
+SEMI.FINAL$`Team 1 Points` <- 0
+SEMI.FINAL$`Team 2 Points` <- 0
+
+for(i in 1:nrow(SEMI.FINAL)){
+  for(j in 1:SIMULATION.NUMBER){
+    if(match_up(SEMI.FINAL[i, 1], SEMI.FINAL[i, 2]) == SEMI.FINAL[i, 1]){
+      SEMI.FINAL[i, 3] <- SEMI.FINAL[i, 3] + 1
+    }else{
+      SEMI.FINAL[i, 4] <- SEMI.FINAL[i, 4] + 1
+    }
+  }
+}
+
+SEMI.FINAL$`Match Winner` <- if_else(SEMI.FINAL$`Team 1 Points`> SEMI.FINAL$`Team 2 Points`, SEMI.FINAL$Team.1, SEMI.FINAL$Team.2)
+
+# Finals
+
+FINAL <- data.frame(`Team 1` = NA,
+                    `Team 2` = NA)
+
+for(a in 1:nrow(SEMI.FINAL)){
+  if(a == 1){
+    FINAL[1, 1] <- SEMI.FINAL[a, 5]
+  }else{
+    FINAL[1, 2] <- SEMI.FINAL[a, 5]
+  }
+}
+
+FINAL$`Team 1 Points` <- 0
+FINAL$`Team 2 Points` <- 0
+
+for(i in 1:nrow(FINAL)){
+  for(j in 1:SIMULATION.NUMBER){
+    if(match_up(FINAL[i, 1], FINAL[i, 2]) == FINAL[i, 1]){
+      FINAL[i, 3] <- FINAL[i, 3] + 1
+    }else{
+      FINAL[i, 4] <- FINAL[i, 4] + 1
+    }
+  }
+}
+
+FINAL$`Match Winner` <- if_else(FINAL$`Team 1 Points`> FINAL$`Team 2 Points`, FINAL$Team.1, FINAL$Team.2)
