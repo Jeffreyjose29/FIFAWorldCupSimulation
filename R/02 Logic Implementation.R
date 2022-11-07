@@ -242,3 +242,44 @@ for(i in 1:nrow(ROUND.OF.16)){
     }
   }
 }
+
+ROUND.OF.16$`Match Winner` <- if_else(ROUND.OF.16$Winner.Games.Won > ROUND.OF.16$Runner.Up.Games.Won, ROUND.OF.16$Match.Winner, ROUND.OF.16$R16.Opponent.Name)
+
+# Quarter Finals
+QUARTER.FINAL <- data.frame(`Team 1` = c(NA, NA, NA, NA), 
+                            `Team 2` = c(NA, NA, NA, NA))
+
+for(a in 1:nrow(ROUND.OF.16)){
+  if(a == 1){
+    QUARTER.FINAL[a, 1] <- ROUND.OF.16[a, 12]
+  }else if(a == 2){
+    QUARTER.FINAL[a, 1] <- ROUND.OF.16[a, 12]
+  }else if(a == 3){
+    QUARTER.FINAL[1, 2] <- ROUND.OF.16[a, 12]
+  }else if(a == 4){
+    QUARTER.FINAL[2, 2] <- ROUND.OF.16[a, 12]
+  }else if(a == 5){
+    QUARTER.FINAL[3, 1] <- ROUND.OF.16[a, 12]
+  }else if(a == 6){
+    QUARTER.FINAL[4, 1] <- ROUND.OF.16[a, 12]
+  }else if(a == 7){
+    QUARTER.FINAL[3, 2] <- ROUND.OF.16[a, 12]
+  }else{
+    QUARTER.FINAL[4, 2] <- ROUND.OF.16[a, 12]
+  }
+}
+
+QUARTER.FINAL$`Team 1 Points` <- 0
+QUARTER.FINAL$`Team 2 Points` <- 0
+
+for(i in 1:nrow(QUARTER.FINAL)){
+  for(j in 1:SIMULATION.NUMBER){
+    if(match_up(QUARTER.FINAL[i, 1], QUARTER.FINAL[i, 2]) == QUARTER.FINAL[i, 1]){
+      QUARTER.FINAL[i, 3] <- QUARTER.FINAL[i, 3] + 1
+    }else{
+      QUARTER.FINAL[i, 4] <- QUARTER.FINAL[i, 4] + 1
+    }
+  }
+}
+
+QUARTER.FINAL$`Match Winner` <- if_else(QUARTER.FINAL$`Team 1 Points`> QUARTER.FINAL$`Team 2 Points`, QUARTER.FINAL$Team.1, QUARTER.FINAL$Team.2)
