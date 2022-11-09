@@ -6,7 +6,7 @@
 
 # KEY VARIABLES
 SIMULATION.NUMBER <- 500
-WORLDCUP.SIMULATIONS <- 10
+WORLDCUP.SIMULATIONS <- 1
 PLAYER.WEIGHT <- 0.90 # % of score based on players
 H2H.WEIGHT <- 0.10 # % of score based on previous head-to-head
 STD <- 10 # "randomness" sampled from a normal distribution with standard deviation 
