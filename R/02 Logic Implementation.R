@@ -5,7 +5,7 @@
 
 
 # KEY VARIABLES
-SIMULATION.NUMBER <- 1000
+SIMULATION.NUMBER <- 10
 WORLDCUP.SIMULATIONS <- 1
 PLAYER.WEIGHT <- 0.90 # % of score based on players
 H2H.WEIGHT <- 0.10 # % of score based on previous head-to-head
@@ -95,11 +95,11 @@ GROUP.H <- c("Portugal", "Ghana", "Uruguay", "Korea Republic")
 # Running simulation for each group
 GROUP.A.DATASET <- data.frame(Group = "Group A",
                               Matchup = c(paste0(GROUP.A[1], "-", GROUP.A[2]),
-                              paste0(GROUP.A[1], "-", GROUP.A[3]),
-                              paste0(GROUP.A[1], "-", GROUP.A[4]),
-                              paste0(GROUP.A[2], "-", GROUP.A[3]),
-                              paste0(GROUP.A[2], "-", GROUP.A[4]),
-                              paste0(GROUP.A[3], "-", GROUP.A[4])))
+                                          paste0(GROUP.A[1], "-", GROUP.A[3]),
+                                          paste0(GROUP.A[1], "-", GROUP.A[4]),
+                                          paste0(GROUP.A[2], "-", GROUP.A[3]),
+                                          paste0(GROUP.A[2], "-", GROUP.A[4]),
+                                          paste0(GROUP.A[3], "-", GROUP.A[4])))
 
 GROUP.B.DATASET <- data.frame(Group = "Group B",
                               Matchup = c(paste0(GROUP.B[1], "-", GROUP.B[2]),
@@ -301,7 +301,7 @@ for(worldCupCounter in 1:WORLDCUP.SIMULATIONS){
   
   # Semi Finals
   SEMI.FINAL <- data.frame(`Team 1` = c(NA, NA), 
-                            `Team 2` = c(NA, NA))
+                           `Team 2` = c(NA, NA))
   
   for(a in 1:nrow(QUARTER.FINAL)){
     if(a == 1){

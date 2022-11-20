@@ -103,7 +103,7 @@ IntlShootouts <- read.csv("ShootOuts.csv", header = TRUE)
 
 # Restrict to after 1930 when the first world cup was
 IntlMatches <- IntlMatches %>%
-  filter(date >= "1930-07-13")
+  filter(date >= "1930-07-13") ## We will only filter to matches played after 2014 (1930-07-13)
 IntlShootouts <- IntlShootouts %>%
   filter(date >= "1930-07-13")
 
@@ -308,3 +308,30 @@ unique(players_df$Nationality)
 
 # Step 4: Write out the extracted datasets to a .csv file for back-up
 write.csv(federations, "Federations.csv", row.names = FALSE)
+
+
+
+## Step 4: Generate table for fifa ranking (Download Link: https://www.kaggle.com/datasets/cashncarry/fifaworldranking?resource=download)
+fifaRanking <- read.csv("fifaRanking.csv", header = TRUE)
+fifaRanking$rank_date <- as.Date(fifaRanking$rank_date)
+fifaRanking <- fifaRanking %>%
+  filter(rank_date == max(rank_date)) %>%
+  arrange(rank)
+
+fifaRanking$country_full[fifaRanking$country_full == "USA"] <- "United States"
+fifaRanking$country_full[fifaRanking$country_full == "IR Iran"] <- "Iran"
+
+
+fifaRanking <- fifaRanking %>% 
+  filter(country_full %in% c("Qatar", "Ecuador", "Senegal", "Netherlands",
+                             "England", "United States", "Wales", "Iran",
+                             "Argentina", "Saudi Arabia", "Mexico", "Poland",
+                             "France", "Australia", "Denmark", "Tunisia",
+                             "Spain", "Costa Rica", "Germany", "Japan",
+                             "Belgium", "Canada", "Morocco", "Croatia",
+                             "Brazil", "Serbia", "Switzerland", "Cameroon",
+                             "Portugal", "Ghana", "Uruguay", "Korea Republic"))
+
+fifaRanking <- fifaRanking %>%
+  select(rank, country_full) %>%
+  rename("Match Winner" = country_full, "World Ranking" = rank)
