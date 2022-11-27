@@ -1,2 +1,4 @@
-![alt text](https://github.com/Jeffreyjose29/FIFAWorldCupSimulation/tree/main/Images/readMe.png?raw=true)
+```markdown
+![ReadMe](https://raw.githubusercontent.com/Jeffreyjose29/FIFAWorldCupSimulation/master/.github/readMe.png)
+```
 
