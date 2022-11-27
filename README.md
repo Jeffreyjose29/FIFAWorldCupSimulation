@@ -1,1 +1,1 @@
-<img src="C:\Users\jeffr\OneDrive\Desktop\Github Activities\FIFAWorldCupSimulation\Images\readMe.png" alt="readMe" />
+<img src="C:\Users\jeffr\OneDrive\Desktop\Github Activities\FIFAWorldCupSimulation\Images\readMe.png" />
