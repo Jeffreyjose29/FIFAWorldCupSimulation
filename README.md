@@ -1,1 +1,1 @@
-![MergedImages (1)](C:\Users\jeffr\Downloads\MergedImages (1).png)
+<img src="C:\Users\jeffr\OneDrive\Desktop\Github Activities\FIFAWorldCupSimulation\Images\readMe.png" alt="readMe" style="zoom:150%;" />
