@@ -424,3 +424,20 @@ for(worldCupCounter in 1:WORLDCUP.SIMULATIONS){
     Wales = Wales + 1
   }
 }
+
+ROUND.OF.16 <- ROUND.OF.16 %>%
+  select(Match.Winner, R16.Opponent.Name, Winner.Games.Won, Runner.Up.Games.Won, `Match Winner`)
+
+colnames(ROUND.OF.16)[1] <- "Team.1"
+colnames(ROUND.OF.16)[2] <- "Team.2"
+colnames(ROUND.OF.16)[3] <- "Team 1 Points"
+colnames(ROUND.OF.16)[4] <- "Team 2 Points"
+
+ROUND.OF.16$Knockout <- "Round Of 16"
+QUARTER.FINAL$Knockout <- "Quarter Final"
+SEMI.FINAL$Knockout <- "Semi Final"
+FINAL$Knockout <- "Final"
+
+SIMULATION.KNOCKOUT <- rbind(ROUND.OF.16, QUARTER.FINAL, SEMI.FINAL, FINAL)
+
+write.csv(SIMULATION.KNOCKOUT, "Knockouts.csv", row.names = FALSE)
