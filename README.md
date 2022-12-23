@@ -25,6 +25,8 @@ The project is completed using R as the primary language.
 
 Each match of the world-cup was simulated 500 times and the world cup was simulated 100 times in order to get the winner and the most common reach for each time in the competition.
 
+<img src="https://raw.githubusercontent.com/Jeffreyjose29/FIFAWorldCupSimulation/main/Images/SimulationKnockout.png" alt="ReadMe" />
+
 **Our results suggest that Brazil are the eventual winners of the competition with France being the runners-up. Both Argentina and Portugal are expected to make the semi-finals in what is most probably Cristiano Ronaldo's and Lionel Messi's Final world-cup capping off an incredible career.**
 
 ## Actual World-Cup Results
