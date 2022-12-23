@@ -2,10 +2,7 @@
 
 # FIFA World Cup 2022 Simulation Model
 
-## <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e3/2022_FIFA_World_Cup.svg/1200px-2022_FIFA_World_Cup.svg.png" alt="img" style="zoom:20%; display: block;
- margin-left: auto;
- margin-right: auto;
- " />
+## <img src="https://raw.githubusercontent.com/Jeffreyjose29/FIFAWorldCupSimulation/main/Images/SimulationKnockout.png" alt="ReadMe" />
 
 ## Overview
 
