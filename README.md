@@ -2,7 +2,7 @@
 
 # FIFA World Cup 2022 Simulation Model
 
-## <img src="https://raw.githubusercontent.com/Jeffreyjose29/FIFAWorldCupSimulation/main/Images/WCLogo.png" alt="FIFA World Cup Qatar 2022" style="zoom:30%;" />
+<img src="https://raw.githubusercontent.com/Jeffreyjose29/FIFAWorldCupSimulation/main/Images/WCLogo.png" alt="FIFA World Cup Qatar 2022" style="zoom:30%;" />
 
 ## Overview
 
