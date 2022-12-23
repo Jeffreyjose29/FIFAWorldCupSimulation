@@ -31,7 +31,15 @@ Each match of the world-cup was simulated 500 times and the world cup was simula
 
 ## Actual World-Cup Results
 
+<img src="https://raw.githubusercontent.com/Jeffreyjose29/FIFAWorldCupSimulation/main/Images/SimulationKnockout.png" alt="Argentina Champions" />
+
 **Argentina** were crowned the champions after winning the final against the title holder France 4–2 on penalties following a 3–3 draw after extra time. It was Argentina's third title and their first since 1986, as well being the first nation from South America to win the tournament since 2002. French player Kylian Mbappé became the first player to score a hat-trick in a World Cup final since Geoff Hurst in the 1966 final and won the Golden Boot as he scored the most goals (eight) during the tournament. Argentine captain Lionel Messi was voted the tournament's best player, winning the Golden Ball. Teammates Emiliano Martínez and Enzo Fernández won the Golden Glove, awarded to the tournament's best goalkeeper, and the Young Player Award, awarded to the tournament's best young player, respectively. The tournament, with 172 goals, set a new record for the highest number of goals scored with the 32 team format.
+
+### Argentina Road To Championship
+
+<img src="https://raw.githubusercontent.com/Jeffreyjose29/FIFAWorldCupSimulation/main/Images/Actual World Cup Knockout Draw.png" alt="Knockout Stages" />
+
+
 
 
 
