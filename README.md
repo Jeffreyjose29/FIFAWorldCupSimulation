@@ -2,6 +2,11 @@
 
 # FIFA World Cup 2022 Simulation Model
 
+## <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e3/2022_FIFA_World_Cup.svg/1200px-2022_FIFA_World_Cup.svg.png" alt="img" style="zoom:20%; display: block;
+ margin-left: auto;
+ margin-right: auto;
+ " />
+
 ## Overview
 
 The **2022 FIFA World Cup** was an international football tournament contested by the men's national teams of FIFA's member associations and 22nd edition of the FIFA World Cup that was won by the Argentina national football team. It took place in Qatar from 20 November to 18 December 2022, making it the first World Cup held in the Arab world and Muslim world, and the second held entirely in Asia after the 2002 tournament in South Korea and Japan. France were the defending champions, having defeated Croatia 4–2 in the 2018 final.
