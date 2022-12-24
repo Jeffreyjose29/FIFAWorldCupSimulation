@@ -41,7 +41,15 @@ Each match of the world-cup was simulated 500 times and the world cup was simula
 
 <img src="https://raw.githubusercontent.com/Jeffreyjose29/FIFAWorldCupSimulation/main/Images/Actual World Cup Knockout Draw.png" alt="Knockout Stages" />
 
+## Simulation vs. Actual
 
+Overall I would like to think that the simulation model produced has worked well overall given the high number of upsets in this tournament and unexpected. A clear example of this is Morocco who were tipped to finish bottom a group which consisted of Canada, Belgium and Croatia given their world ranking and previous matches. However, they provided the shock run of the tournament by beating big teams such as Portugal and Spain to reach the semi-finals before falling 2-0 to France. 
+
+The winners of our simulation Brazil exited the tournament in the round of 16 with a shock loss to Croatia on penalties as they conceded 4 minutes before full-time. This then made Argentina the favorites to life the coveted trophy.
+
+Our simulation had predicted both France and Argentina to reach the semi-finals which was as it happened and we predicted France to be the second finalist playing Brazil in the final. Although Brazil did not make the finals, we did estimate France to reach the backend of the competition accurately. 
+
+Overall this has been a fun project and helped me to engage more with the world-cup and I think the results we have obtained from our simulation is not too bad considering the overall flow of the tournaments given shock results, early player injuries and so on. 
 
 
 
